@@ -13,8 +13,6 @@ import java.lang.ref.SoftReference;
  * Created by limxing on 16/1/7.
  */
 public class LoadingView extends ImageView {
-
-
     private MyRunable runnable;
     private int width;
     private int height;
