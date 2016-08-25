@@ -18,23 +18,28 @@ public class LoadingView extends ImageView {
     private int height;
     public LoadingView(Context context) {
         super(context);
-        init();
     }
 
     public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public LoadingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        stopLoad();
         runnable = null;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        init();
+
     }
 
     private void init() {
@@ -44,6 +49,7 @@ public class LoadingView extends ImageView {
         width = bitmap.getWidth() / 2;
         height = bitmap.getHeight() / 2;
         runnable = new MyRunable(this);
+        startLoad();
     }
 
     public void startLoad() {
@@ -90,7 +96,7 @@ public class LoadingView extends ImageView {
 
         public void startload() {
             flag = true;
-            if (loadingViewSoftReference.get().runnable != null && max != null) {
+            if (!flag&&loadingViewSoftReference.get().runnable != null && max != null) {
                 loadingViewSoftReference.get().postDelayed(loadingViewSoftReference.get().runnable, 80);
             }
         }
