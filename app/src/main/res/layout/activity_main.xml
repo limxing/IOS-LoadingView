@@ -17,7 +17,7 @@
     <me.leefeng.ios_loadingview.LoadingView
         android:id="@+id/load"
         android:layout_width="wrap_content"
-        android:src="@mipmap/ic_launcher"
+
         android:layout_height="wrap_content" />
     <Switch
         android:layout_marginTop="20dp"
