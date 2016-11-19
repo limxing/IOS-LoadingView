@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -31,9 +32,10 @@ public class LoadingView extends ImageView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        stopLoad();
+        runnable.setFlag(false);
         runnable = null;
     }
+
 
     @Override
     protected void onAttachedToWindow() {
@@ -44,31 +46,27 @@ public class LoadingView extends ImageView {
 
     private void init() {
         setScaleType(ScaleType.MATRIX);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.loading);
-        setImageBitmap(bitmap);
-        width = bitmap.getWidth() / 2;
-        height = bitmap.getHeight() / 2;
+       Drawable drawable= getDrawable();
+        if (drawable==null) {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.loading);
+            setImageBitmap(bitmap);
+            width = bitmap.getWidth() / 2;
+            height = bitmap.getHeight() / 2;
+        }else{
+            measure(0,0);
+            width = getMeasuredWidth() / 2;
+            height = getMeasuredHeight() / 2;
+        }
         runnable = new MyRunable(this);
-        startLoad();
+        runnable.run();
     }
 
-    public void startLoad() {
-        if (runnable != null) {
-            runnable.startload();
-        }
-    }
-
-    public void stopLoad() {
-        if (runnable != null) {
-            runnable.stopload();
-        }
-    }
 
     static class MyRunable implements Runnable {
-        private boolean flag;
         private SoftReference<LoadingView> loadingViewSoftReference;
         private float degrees = 0f;
         private Matrix max;
+        private boolean flag=true;
 
         public MyRunable(LoadingView loadingView){
             loadingViewSoftReference=new SoftReference<LoadingView>(loadingView);
@@ -84,21 +82,13 @@ public class LoadingView extends ImageView {
                 if (degrees == 360) {
                     degrees = 0;
                 }
-                if (flag) {
+                if (flag)
                     loadingViewSoftReference.get().postDelayed(loadingViewSoftReference.get().runnable, 80);
-                }
             }
         }
 
-        public void stopload() {
-            flag = false;
-        }
-
-        public void startload() {
-            flag = true;
-            if (!flag&&loadingViewSoftReference.get().runnable != null && max != null) {
-                loadingViewSoftReference.get().postDelayed(loadingViewSoftReference.get().runnable, 80);
-            }
+        public void setFlag(boolean flag) {
+            this.flag = flag;
         }
     }
 }

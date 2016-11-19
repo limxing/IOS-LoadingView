@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity {
         main_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    load.startLoad();
-                }else{
-                    load.stopLoad();
-                }
+//                if (b){
+//                    load.startLoad();
+//                }else{
+//                    load.stopLoad();
+//                }
             }
         });
     }
